@@ -3,10 +3,80 @@
   <head>
     <meta charset="utf-8">
     <title>Dataverse Chat</title>
-    <!--Aquí puedes importar tu archivo de CSS para agregar estilos.-->
+    <link rel="stylesheet" href="./style.css" /><!--Aquí puedes importar tu archivo de CSS para agregar estilos.-->
   </head>
   <body>
-    <div id="root"></div>
-    <script src="index.js" type="module"></script>
+    <header>
+      <h1>Inventos que cambiaron el mundo</h1>  
+    </header>
+    <main>
+      <label for="yearFilter">Filtrar por año:</label>
+      <select id="yearFilter" name="yearFilter">      
+         <option value="">selecciona</option>
+         <option value="105">105</option>
+         <option value="206">206</option>
+         <option value="904">904</option>
+         <option value="1440">1440</option>
+         <option value="1793">1793</option>
+         <option value="1807">1807</option>
+         <option value="1837">1837</option>
+         <option value="1851">1851</option>
+         <option value="1875">1875</option>
+         <option value="1876">1876</option>
+         <option value="1879">1879</option>
+         <option value="1880">1880</option>
+         <option value="1895">1895</option>
+         <option value="1903">1903</option>
+         <option value="1908">1908</option>
+         <option value="1928">1928</option>
+         <option value="1941">1941</option>
+         <option value="1945">1945</option>
+         <option value="1946">1946</option>
+         <option value="1947">1947</option>
+         <option value="1958">1958</option>
+         <option value="1969">1969</option>. 
+      </select>
+      <label for="countryFilter">Filtrar por país:</label>
+      <select id="countryFilter" name="countryFilter">
+         <option value="">selecciona</option>
+         <option value="Ancient Greece">Ancient Greece</option>
+         <option value="Arab States">Arab States</option>     
+         <option value="China">China</option>
+         <option value="England">England</option>
+         <option value="France">France</option>
+         <option value="Germany">Germany</option>
+         <option value="Italy">Italy</option>
+         <option value="London">London</option>
+         <option value="Mesopotamia">Mesopotamia</option>
+         <option value="United Kingdom">United Kingdom</option>
+         <option value="USA">USA</option>
+      </select>
+      <label for="sortOrderYear">Ordenar por año:</label>
+     <select id="sortOrderYear" name="sort-order">
+       <option value="">seleccionar</option>
+       <option value="asc">Ascendente</option>
+       <option value="desc">Descendente</option>
+     </select>
+     <label for="sortOrderLocation">Ordenar por location:</label>
+     <select id="sortOrderLocation" name="sortOrderLocation">
+       <option value="">seleccionar</option>
+       <option value="asc">Ascendente</option>
+       <option value="desc">Descendente</option>
+     </select>
+   
+     <button id="statsButton">% de inventos creados por cada país</button>
+     <button id="button-clear">limpiar todo</button>  
+    </main>
+    <div id="grid-container" class="grid-container">
+     <ul id="inventions-list">
+         <li> </li>
+     </ul>
+    </div>
+    
+    <!-- Div para mostrar las estadísticas -->
+    <div id="statsDisplay"></div>
+    
+    <footer>Creado por: Islena caldas</footer>
+    <script src="./views/index.js" type="module"></script>
   </body>
 </html>
