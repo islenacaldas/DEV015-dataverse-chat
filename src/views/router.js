@@ -6,14 +6,21 @@ export const setRootEl = (el) => {
   rootEL = el;
 };
 
-export const setRoutes = (el) => {
-  console.log(el);
+export const setRoutes = (r) => {
+  ROUTES = r;
 };
 
-export const renderView = (el) => {
-  console.log(el);
+export const renderView = (path) => {
+  const view = ROUTES[path] || ROUTES["/"];
+  rootEL.innerHTML = "";
+  rootEL.appendChild(view());
 };
 
 export const onURLChange = (callback) => {
-  window.addEventListener("popstate", callback);
+  const handleURLChange = () => {
+    const path = window.addEventListener("popstate", callback);
+  };
+  window.addEventListener("popstate", handleURLChange);
+
+  handleURLChange();
 };
