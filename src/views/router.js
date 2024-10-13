@@ -1,26 +1,17 @@
-let ROUTES = {};
-let rootEL;
-
-//funcion establecer elemento raiz donde se renderian las vistas//
+let rootEl;
+let routes = {};
+// Función para establecer el elemento raíz donde se renderizarán las vistas
 export const setRootEl = (el) => {
-  rootEL = el;
+  rootEl = el;
 };
 
 export const setRoutes = (r) => {
-  ROUTES = r;
+  routes = r;
 };
 
 export const renderView = (path) => {
-  const view = ROUTES[path] || ROUTES["/"];
-  rootEL.innerHTML = "";
-  rootEL.appendChild(view());
+  const view = routes[path] || routes["/"];
+  rootEl.innerHTML = "";
+  rootEl.appendChild(view());
 };
 
-export const onURLChange = (callback) => {
-  const handleURLChange = () => {
-    const path = window.addEventListener("popstate", callback);
-  };
-  window.addEventListener("popstate", handleURLChange);
-
-  handleURLChange();
-};

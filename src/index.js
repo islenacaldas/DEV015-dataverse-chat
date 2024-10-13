@@ -1,22 +1,33 @@
-export const renderItems = (data) => {
-    const ul= document.createElement('ul');
-    
-    data.forEach(item => {
-      const li= document.createElement('li');
-  
-      li.innerHTML=`
-      <div>
-      <img src="${item.extraInfo.imageSource}" alt="${item.name}" style="width:100px;">
-      <h3>${item.name}<h3>
-      <p>${item.shortDescription}</p>
-      <p>${item.description}</p>
-      <p>${item.facts.yearOfEvent}</p>
-      <p>${item.facts.location}</p>
-      <p>${item.facts.impact}
-      </div>`
-  
-  
-      ul.appendChild(li)
-    });
-    return ul;
-  };
+import { setRootEl, setRoutes, renderView } from "./views/router";
+import Home from "./views/home.js";
+import About from "./views/about.js";
+
+const rootEl = document.getElementById("root");
+
+setRootEl(rootEl);
+
+const routes = {
+  "/": Home,
+  "/about": About,
+};
+
+setRoutes(routes);
+
+// Función para manejar la navegación
+function handleNavigation(e) {
+  if (e.target.matches('nav a')) {
+    e.preventDefault();
+    const path = new URL(e.target.href).pathname;
+    window.history.pushState({}, '', path);
+    renderView(path);
+  }
+}
+
+// Evento para manejar clics en los enlaces de navegación
+document.body.addEventListener('click', handleNavigation);
+
+
+// Usar onURLChange para manejar cambios en la URL, incluyendo los botones de avance/retroceso
+onURLChange((path) => {
+  renderView(path);
+});

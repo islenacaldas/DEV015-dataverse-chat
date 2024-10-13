@@ -1,7 +1,15 @@
-export function home(props) {
-  const viewEl = document.createElement("div");
-  viewEl.textContent = `<h1>bienvenido a la pagina de inicio ${
-    props.name ? props.name : ""}</h1>`;
-  return viewEl;
+import { renderItems } from "./renderItems";
+import { data } from "../data/dataset.js";
+
+export default function home() {
+  const element = document.createElement("div");
+  element.className = "home-view";
+
+  const title = document.createElement("div");
+  title.textContent = "Bienvenida a Dataverse";
+  element.appendChild(title);
+
+  element.appendChild(renderItems(data))
+
+  return element;
 }
-   
