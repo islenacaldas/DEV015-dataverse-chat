@@ -4,3 +4,4 @@ export function home(props) {
     props.name ? props.name : ""}</h1>`;
   return viewEl;
 }
+   
