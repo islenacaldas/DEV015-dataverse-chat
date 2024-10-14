@@ -15,3 +15,11 @@ export const renderView = (path) => {
   rootEl.appendChild(view());
 };
 
+export const onURLChange = (callback) => {
+  window.addEventListener('popstate', () => {
+    callback(window.location.pathname);
+  });
+
+  // También manejamos el cambio inicial de URL
+  callback(window.location.pathname);
+};
