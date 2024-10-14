@@ -2,8 +2,6 @@ import { renderItems } from "./renderItems";
 import { data } from "../data/dataset.js";
 import { navigateTo } from "./router.js"; 
 
-import { navigateTo } from './router.js';
-
 export default function Home(props) {
   const element = document.createElement('div');
   element.innerHTML = `

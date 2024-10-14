@@ -1,25 +1,25 @@
 let rootEl;
-let routes = {};
-// Función para establecer el elemento raíz donde se renderizarán las vistas
-export const setRootEl = (el) => {
+let routes;
+
+export function setRootEl(el) {
   rootEl = el;
-};
+}
 
-export const setRoutes = (r) => {
-  routes = r;
-};
+export function setRoutes(routeObj) {
+  routes = routeObj;
+}
 
-export const renderView = (pathname, props= {}) => {
+export function renderView(pathname, props = {}) {
   const view = routes[pathname] || routes["/error"];
   rootEl.innerHTML = "";
   rootEl.appendChild(view(props));
-};
+}
 
-export const onURLChange = (callback) => {
-  window.addEventListener('popstate', (event) => {
+export function onURLChange(callback) {
+  window.addEventListener("popstate", (event) => {
     callback(window.location.pathname, event.state);
   });
-};
+}
 
 export function navigateTo(pathname, props = {}) {
   window.history.pushState(props, "", pathname);
