@@ -1,15 +1,9 @@
-export const chatIndividual = () => {
-  const element = document.createElement("div");
-  element.className = "chat-individual-view";
-
-  const title = document.createElement("h1");
-  title.textContent = "chat-individual";
-  element.appendChild("title");
-
-  const chatArea = document.createElement("div");
-  chatArea.className = "chat-area";
-  chatArea.textContent = "Area de chat individual";
-  element.appendChild(chatArea);
-
+export function chatIndividual(props) {
+  const element = document.createElement('div');
+  element.innerHTML = `
+    <h1>Chat Individual</h1>
+    <p>Aquí puedes iniciar un chat individual.</p>
+    <a href="/">Volver al inicio</a>
+  `;
   return element;
-};
+}

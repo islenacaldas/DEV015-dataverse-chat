@@ -9,17 +9,24 @@ export const setRoutes = (r) => {
   routes = r;
 };
 
-export const renderView = (path) => {
-  const view = routes[path] || routes["/"];
+export const renderView = (pathname, props= {}) => {
+  const view = routes[pathname] || routes["/error"];
   rootEl.innerHTML = "";
-  rootEl.appendChild(view());
+  rootEl.appendChild(view(props));
 };
 
 export const onURLChange = (callback) => {
-  window.addEventListener('popstate', () => {
-    callback(window.location.pathname);
+  window.addEventListener('popstate', (event) => {
+    callback(window.location.pathname, event.state);
   });
+};
 
-  // También manejamos el cambio inicial de URL
-  callback(window.location.pathname);
+export function navigateTo(pathname, props = {}) {
+  window.history.pushState(props, "", pathname);
+  renderView(pathname, props);
+}
+
+const queryStringToObject = (queryString) => {
+  const params = new URLSearchParams(queryString);
+  return Object.fromEntries(params);
 };
