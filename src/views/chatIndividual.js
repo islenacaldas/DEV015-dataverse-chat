@@ -9,7 +9,7 @@ export const chatIndividual = () => {
   const chatArea = document.createElement("div");
   chatArea.className = "chat-area";
   chatArea.textContent = "Area de chat individual";
-  elelemen.appendChild(chatArea);
+  element.appendChild(chatArea);
 
   return element;
 };
