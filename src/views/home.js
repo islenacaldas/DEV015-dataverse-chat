@@ -1,11 +1,11 @@
-import { renderItems } from "./renderItems";
+import { renderItems } from "/path/to/renderItems.js";
 import { data } from "../data/dataset.js";
-import { navigateTo } from "./router.js"; 
+import { navigateTo } from "./router.js";
 
-export default function Home(props) {
-  const element = document.createElement('div');
-  element.innerHTML = `
-    <h1>Bienvenido a Dataverse, ${props.name || 'Visitante'}!</h1>
+export function Home(props) {
+  const viewEl = document.createElement("div");
+  viewEl.innerHTML = `
+    <h1>Bienvenido a Dataverse, ${props.name || "Visitante"}!</h1>
     <nav>
       <ul>
         <li><a href="/about">Acerca de</a></li>
@@ -15,13 +15,7 @@ export default function Home(props) {
     </nav>
     <button id="about-button">Ir a Acerca de</button>
   `;
+  const itemList = renderItems(data);
 
-  element.querySelector('#about-button').addEventListener('click', () => {
-    navigateTo("/about", { name: "Xochitl" });
-  });
-
-  return element;
+  return viewEl.appendChild(itemList);
 }
-
-
-
