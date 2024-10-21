@@ -1,23 +1,35 @@
-import { setRootEl, setRoutes, renderView, onURLChange, navigationTo } from "./router";
-import home from "./views/home.js";
-import error from "./views/error.js";
+import { setRootEl, setRoutes, onURLChange, navigationTo } from "../src/router.js";
+import { home } from "./views/home.js";
 
-const rootEl = document.getElementById("root");
-setRootEl(rootEl);
+document.addEventListener("DOMContentLoaded", () => {
+  const rootEl = document.getElementById("root");
 
-setRoutes({
-  "/": home,
-  "/error": error,
-});
-
-window.addEventListener("popstate", onURLChange);
-
-onURLChange();
-
-Document.addEventListener("click", (e) => {
-  if (e.target.matches("[data-link]")) {
-    e.preventDefault();
-    history.pushState(null, "", e.target.href);
-    onURLChange();
+  if (!rootEl) {
+    console.error("No se encontró el elemento root");
+    return;
   }
+
+  setRootEl(rootEl);
+
+  setRoutes({
+    '/': home,
+    '/error': (props) => {
+      const el = document.createElement('div');
+      el.textContent = props.errorMessage || 'An error occurred';
+      return el;
+    },
+    // Otras rutas aquí
+  });
+
+  window.addEventListener("popstate", onURLChange);
+
+  document.addEventListener("click", (e) => {
+    if (e.target.matches("[data-link]")) {
+      e.preventDefault();
+      navigationTo(e.target.getAttribute("href"));
+    }
+  });
+
+  // Renderiza la vista inicial
+  onURLChange();
 });

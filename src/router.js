@@ -15,7 +15,6 @@ export function setRoutes(routes) {
   ROUTES = routes;
 }
 
-
 const queryStringToObject = (queryString) => {
   const params = new URLSearchParams(queryString);
   const obj = {};
@@ -25,17 +24,24 @@ const queryStringToObject = (queryString) => {
   return obj;
 };
 
-export const renderView = (pathname, props = {}) => {
-  rootEl.innerHTML = ''; // Limpia el contenido existente
-  const view = ROUTES[pathname] || ROUTES["/error"];
-  if (typeof view === 'function') {
+function renderView(route, props) {
+  const view = ROUTES[route];
+  if (view) {
+    console.log("Rendering view:", view);
     const viewElement = view(props);
+    if (!rootEl) {
+      console.error("Root element not set. Call setRootEl first.");
+      return;
+    }
+    rootEl.innerHTML = '';
     rootEl.appendChild(viewElement);
   } else {
-    console.error('La vista no es una función:', pathname);
+    console.error("Route not found:", route);
+    if (ROUTES["/error"]) {
+      renderView("/error", { errorMessage: "Route not found" });
+    }
   }
-};
-
+}
 
 export const navigationTo = (pathname, props = {}) => {
   window.history.pushState({}, null, pathname);

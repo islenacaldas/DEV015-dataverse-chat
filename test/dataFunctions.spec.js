@@ -1,7 +1,7 @@
 import { filterDataByLocation,
-    filterByYear}  from '../src/dataFunctions.js';
+    filterByYear}  from '../src/lib/dataFunction.js';
   
-  import { data as fakeData } from './data.js';
+  import { data as fakeData } from '../src/data/dataset.js';
   
   
   
