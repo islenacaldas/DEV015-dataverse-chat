@@ -9,11 +9,12 @@ export function setRoutes(routes) {
   if (typeof routes !== "object") {
     throw new Error("Routes debe ser un objeto");
   }
-  if (!routes["/error"]) {
-    throw new Error("Debe definirse una ruta/error");
+  if (typeof routes["/error"] !== "function") {
+    throw new Error("Debe definirse una función para la ruta /error");
   }
   ROUTES = routes;
 }
+
 
 const queryStringToObject = (queryString) => {
   const params = new URLSearchParams(queryString);
@@ -25,10 +26,17 @@ const queryStringToObject = (queryString) => {
 };
 
 export const renderView = (pathname, props = {}) => {
-  rootEl.innerHTML = ROUTES[pathname] || ROUTES["/error"];
-  const viewElement = view(props);
-  rootEl.appendchild(viewElement);
+  rootEl.innerHTML = ''; // Limpia el contenido existente
+  const view = ROUTES[pathname] || ROUTES["/error"];
+  if (typeof view === 'function') {
+    const viewElement = view(props);
+    rootEl.appendChild(viewElement);
+  } else {
+    console.error('La vista no es una función:', pathname);
+  }
 };
+
+
 export const navigationTo = (pathname, props = {}) => {
   window.history.pushState({}, null, pathname);
   renderView(pathname, props);

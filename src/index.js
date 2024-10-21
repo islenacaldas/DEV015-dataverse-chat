@@ -1,23 +1,14 @@
-import { setRootEl, setRoutes, renderView, onURLChange } from "./router";
+import { setRootEl, setRoutes, renderView, onURLChange, navigationTo } from "./router";
 import home from "./views/home.js";
+import error from "./views/error.js";
 
 const rootEl = document.getElementById("root");
 setRootEl(rootEl);
 
 setRoutes({
   "/": home,
-  "/error":error,
+  "/error": error,
 });
-
-const onURLChange = () => {
-  const { pathname, searh } = window.location;
-  const queryparams = new URLSearchParams(search);
-  const props = Object.fromEntries(queryparams);
-
-  const view = ROUTES[pathname] || ROUTES["/error"];
-  rootEl.innerHTML = "";
-  rootEl.appendChild(view(props));
-};
 
 window.addEventListener("popstate", onURLChange);
 
