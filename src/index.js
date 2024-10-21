@@ -1,50 +1,32 @@
-import Home from "./views/home.js";
-import About from "./views/about.js";
-import { setRootEl, setRoutes, renderView, onURLChange, navigateTo } from "./views/router.js";
-import { chatGrupal } from "./views/chatGrupal.js";
-import { chatIndividual } from "./views/chatIndividual.js";
-import ErrorView from "./views/error.js";
+import { setRootEl, setRoutes, renderView, onURLChange } from "./router";
+import home from "./views/home.js";
 
-window.addEventListener("DOMContentLoaded", () => {
-  const rootEl = document.getElementById("root");
-  setRootEl(rootEl);
+const rootEl = document.getElementById("root");
+setRootEl(rootEl);
 
-  const routes = {
-    "/": Home,
-    "/about": About,
-    "/chat-individual": chatIndividual,
-    "/chat-grupal": chatGrupal,
-    "/error": ErrorView
-  };
-
-  setRoutes(routes);
-
-  function handleNavigation(e) {
-    if (e.target.matches("nav a")) {
-      e.preventDefault();
-      const path = new URL(e.target.href).pathname;
-      navigateTo(path);
-    }
-  }
-
-  document.body.addEventListener("click", handleNavigation);
-
-  onURLChange((pathname, state) => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const props = {
-      ...state,
-      ...Object.fromEntries(searchParams)
-    };
-    renderView(pathname, props);
-  });
-
-  // Manejar la carga inicial de la URL
-  const searchParams = new URLSearchParams(window.location.search);
-  const initialProps = Object.fromEntries(searchParams);
-  renderView(window.location.pathname, initialProps);
+setRoutes({
+  "/": home,
+  "/error":error,
 });
 
-// Handle URL changes
-window.addEventListener('popstate', ({state}) => {
-  onURLChange(window.location.pathname, state);
+const onURLChange = () => {
+  const { pathname, searh } = window.location;
+  const queryparams = new URLSearchParams(search);
+  const props = Object.fromEntries(queryparams);
+
+  const view = ROUTES[pathname] || ROUTES["/error"];
+  rootEl.innerHTML = "";
+  rootEl.appendChild(view(props));
+};
+
+window.addEventListener("popstate", onURLChange);
+
+onURLChange();
+
+Document.addEventListener("click", (e) => {
+  if (e.target.matches("[data-link]")) {
+    e.preventDefault();
+    history.pushState(null, "", e.target.href);
+    onURLChange();
+  }
 });
