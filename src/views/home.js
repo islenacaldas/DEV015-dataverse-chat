@@ -1,6 +1,7 @@
 import data from "../data/dataset.js";
+import { filterByYear } from "../lib/dataFunction.js";
 
-export const  home= ()=>{
+export const home = () => {
   const viewEl = document.createElement("div");
   viewEl.className = "home";
 
@@ -25,8 +26,16 @@ export const  home= ()=>{
   };
 
   const title = document.createElement("h1");
-  title.textContent = "Home";
+  title.textContent = "Invnentos que cambiaron al mundo";
   viewEl.appendChild(title);
+
+  const yearFilter = createFilter("filtrar por año:", getUniqueYears(data));
+
+
+
+  viewEl.appendChild(yearFilter);
+
+
 
   const container = document.createElement("div");
   container.id = "container";
@@ -49,4 +58,4 @@ export const  home= ()=>{
   // Aquí puedes agregar más funcionalidades como filtros, ordenamiento, etc.
 
   return viewEl;
-}
+};
