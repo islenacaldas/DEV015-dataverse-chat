@@ -29,14 +29,6 @@ export const home = () => {
   title.textContent = "Invnentos que cambiaron al mundo";
   viewEl.appendChild(title);
 
-  const yearFilter = createFilter("filtrar por año:", getUniqueYears(data));
-
-
-
-  viewEl.appendChild(yearFilter);
-
-
-
   const container = document.createElement("div");
   container.id = "container";
   viewEl.appendChild(container);
