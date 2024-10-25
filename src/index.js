@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setRoutes({
     "/": home,
-    "/about":about,
+    "/about": about,
     "/error": (props) => {
       const el = document.createElement("div");
       el.textContent = props.errorMessage || "An error occurred";
