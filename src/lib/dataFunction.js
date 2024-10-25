@@ -1,20 +1,30 @@
 // Mantenemos tus funciones originales sin cambios
 export const filterDataByLocation = (data, value) => {
-    return data.filter(item => item.facts.location.includes(value));
+    // Si no hay valor de filtro, retornar todos los datos
+    if (!value) return data;
+    
+    // Hacer la comparación exacta
+    return data.filter(item => item.facts.location === value);
   };
   
   export const filterByYear = (data, value) => {
-    return data.filter(item => item.facts.yearOfEvent === value);
+    // Si no hay valor de filtro, retornar todos los datos
+    if (!value) return data;
+    
+    const yearNumber = parseInt(value, 10);
+    // Hacer la comparación exacta con números
+    return data.filter(item => item.facts.yearOfEvent === yearNumber);
   };
   
+
   export const sortData = (data, sortBy, sortOrder) => {
     return [...data].sort((a, b) => {
       let compareA, compareB;
   
       switch (sortBy) {
       case 'year':
-        compareA = a.facts.yearOfEvent;
-        compareB = b.facts.yearOfEvent;
+        compareA = parseInt(a.facts.yearOfEvent, 10);
+        compareB = parseInt(b.facts.yearOfEvent, 10);
         break;
       case 'location':
         compareA = a.facts.location.toLowerCase();
