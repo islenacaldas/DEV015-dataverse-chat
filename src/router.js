@@ -1,55 +1,61 @@
-let ROUTES = {};
-let rootEl;
+let ROUTES = {};  // Almacenará todas las rutas de la aplicación
+let rootEl;       // Almacenará el elemento DOM raíz donde se renderizará todo
 
+// Función para establecer el elemento raíz
 export const setRootEl = (el) => {
-  rootEl = el;
+  rootEl = el;  // Guarda el elemento DOM que servirá como contenedor principal
 };
 
+// Función para establecer las rutas disponibles
 export function setRoutes(routes) {
-  if (typeof routes !== "object") {
-    throw new Error("Routes debe ser un objeto");
-  }
-  if (typeof routes["/error"] !== "function") {
-    throw new Error("Debe definirse una función para la ruta /error");
-  }
-  ROUTES = routes;
+  ROUTES = routes;  // Guarda el objeto con todas las rutas de la aplicación
 }
 
+// Función que convierte parámetros de URL en un objeto
 const queryStringToObject = (queryString) => {
+  // Crea un objeto URLSearchParams con los parámetros de la URL
   const params = new URLSearchParams(queryString);
-  const obj = {};
-  for (const [key, value] of params) {
-    obj[key] = value;
-  }
-  return obj;
+  // Convierte los parámetros en un objeto JavaScript
+  const pramsObjetc = Object.fromEntries(params);
+  return pramsObjetc;
 };
 
-function renderView(route, props) {
-  const view = ROUTES[route];
-  if (view) {
-    console.log("Rendering view:", view);
-    const viewElement = view(props);
-    if (!rootEl) {
-      console.error("Root element not set. Call setRootEl first.");
-      return;
-    }
-    rootEl.innerHTML = '';
-    rootEl.appendChild(viewElement);
-  } else {
-    console.error("Route not found:", route);
-    if (ROUTES["/error"]) {
-      renderView("/error", { errorMessage: "Route not found" });
-    }
-  }
-}
+// Función que renderiza una vista específica
+const renderView = (pathname, props) => {
+  rootEl.innerHTML = "";  // Limpia el contenido actual
+  const RenderViews = ROUTES[pathname];  // Obtiene la función de renderizado para la ruta
 
+  if (RenderViews) {  // Si existe la ruta
+    // Ejecuta la función de renderizado y obtiene la vista y sus eventos
+    const { view, getElementsAndEvents } = RenderViews(props);
+    rootEl.appendChild(view);  // Añade la vista al DOM
+    getElementsAndEvents();    // Inicializa los eventos de la vista
+  } else {
+    navigationTo("/404");  // Si la ruta no existe, redirige a 404
+  }
+};
+
+// Función para navegar a una nueva ruta
 export const navigationTo = (pathname, props = {}) => {
-  window.history.pushState({}, null, pathname);
+  // Construye la cadena de consulta si hay propiedades
+  const queryString = Object.keys(props).length
+    ? `?${new URLSearchParams(props)}`  // Si hay props, crea la cadena de consulta
+    : "";  // Si no hay props, cadena vacía
+
+  // Construye la URL completa
+  const url = `${window.location.origin}${pathname}${queryString}`;
+  // Actualiza la historia del navegador
+  window.history.pushState({}, "", url);
+  // Renderiza la nueva vista
   renderView(pathname, props);
 };
 
-export const onURLChange = (location = window.location) => {
-  const { pathname, search } = location;
-  const queryparams = queryStringToObject(search);
-  renderView(pathname, queryparams);
+// Función que maneja los cambios en la URL
+export const onUrlChange = () => {
+  // Obtiene la ruta y los parámetros de la URL actual
+  const { pathname, search } = window.location;
+  // Convierte los parámetros de la URL en un objeto
+  const props = queryStringToObject(search);
+  // Renderiza la vista correspondiente
+  renderView(pathname, props);
 };
