@@ -1,11 +1,6 @@
-import {
-  setRootEl,
-  setRoutes,
-  onURLChange,
-  navigationTo,
-} from "../src/router.js";
+
+import { setRootEl, setRoutes, onURLChange, navigationTo } from "../src/router.js";
 import { home } from "./views/home.js";
-import { about } from "./views/about.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
@@ -18,11 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
   setRootEl(rootEl);
 
   setRoutes({
-    "/": home,
-    "/about": about,
-    "/error": (props) => {
-      const el = document.createElement("div");
-      el.textContent = props.errorMessage || "An error occurred";
+    '/': home,
+    '/error': (props) => {
+      const el = document.createElement('div');
+      el.textContent = props.errorMessage || 'An error occurred';
       return el;
     },
     // Otras rutas aquí
