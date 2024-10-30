@@ -1,6 +1,7 @@
 
-import { setRootEl, setRoutes, onURLChange, navigationTo } from "../src/router.js";
+import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
+import {}from "./views/chatGrupal.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
@@ -10,10 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+const title = document.createElement("h1");
+  title.textContent = "Inventos que cambiaron el mundo";
+  title.classList.add("page-title")
+  viewEl.appendChild(title);
   setRootEl(rootEl);
 
   setRoutes({
     '/': home,
+    '/chat-grupal':chatGrupal,
     '/error': (props) => {
       const el = document.createElement('div');
       el.textContent = props.errorMessage || 'An error occurred';
