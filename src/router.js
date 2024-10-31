@@ -1,3 +1,4 @@
+import {nav} from "./views/nav.js";
 let ROUTES = {};
 let rootEl;
 
@@ -34,6 +35,7 @@ function renderView(route, props) {
       return;
     }
     rootEl.innerHTML = '';
+    rootEl.appendChild(nav())//esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
     rootEl.appendChild(viewElement);
   } else {
     console.error("Route not found:", route);
