@@ -1,4 +1,4 @@
-import {nav} from "./views/nav.js";
+import {header} from "./componentes/header.js";
 let ROUTES = {};
 let rootEl;
 
@@ -35,10 +35,9 @@ function renderView(route, props) {
       return;
     }
     rootEl.innerHTML = '';
-    rootEl.appendChild(nav())//esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
+    rootEl.appendChild(header())//esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
     rootEl.appendChild(viewElement);
   } else {
-    console.error("Route not found:", route);
     if (ROUTES["/error"]) {
       renderView("/error", { errorMessage: "Route not found" });
     }

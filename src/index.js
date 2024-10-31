@@ -1,7 +1,7 @@
 import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
 import {} from "./views/chatGrupal.js";
-import { nav } from "./views/nav.js";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const title = document.createElement("h1");
   title.textContent = "Inventos que cambiaron el mundo";
   title.classList.add("page-title");
- // viewEl.appendChild(title);
   setRootEl(rootEl);
 
   setRoutes({
