@@ -1,5 +1,9 @@
 import data from "../data/dataset.js";
-import { processData, clearAllFilters, computeStats } from "../lib/dataFunction.js";
+import {
+  processData,
+  clearAllFilters,
+  computeStats,
+} from "../lib/dataFunction.js";
 
 export const home = () => {
   const viewEl = document.createElement("div");
@@ -27,12 +31,15 @@ export const home = () => {
 
   const title = document.createElement("h1");
   title.textContent = "Inventos que cambiaron el mundo";
-  title.classList.add("page-title")
+  title.classList.add("page-title");
   viewEl.appendChild(title);
 
   // Creación de los filtros
   const yearFilter = createFilter("Filtrar por año:", getUniqueYears(data));
-  const locationFilter = createFilter("Filtrar por país:", getUniqueLocations(data));
+  const locationFilter = createFilter(
+    "Filtrar por país:",
+    getUniqueLocations(data)
+  );
   const yearSort = createSort("Ordenar por año:");
   const locationSort = createSort("Ordenar por ubicación:");
 
@@ -41,12 +48,12 @@ export const home = () => {
   viewEl.appendChild(yearSort);
   viewEl.appendChild(locationSort);
 
-  const clearButton = document.createElement('button');
-  clearButton.textContent = 'Limpiar filtros';
+  const clearButton = document.createElement("button");
+  clearButton.textContent = "Limpiar filtros";
   viewEl.appendChild(clearButton);
 
-  const statsButton = document.createElement('button');
-  statsButton.textContent = 'Mostrar estadísticas';
+  const statsButton = document.createElement("button");
+  statsButton.textContent = "Mostrar estadísticas";
   viewEl.appendChild(statsButton);
 
   const container = document.createElement("div");
@@ -69,11 +76,11 @@ export const home = () => {
     const options = {
       year: yearFilter.value,
       location: locationFilter.value,
-      sortBy: yearSort.value ? 'year' : locationSort.value ? 'location' : '',
-      sortOrder: yearSort.value || locationSort.value
+      sortBy: yearSort.value ? "year" : locationSort.value ? "location" : "",
+      sortOrder: yearSort.value || locationSort.value,
     };
-    
-    console.log('Opciones aplicadas:', options);
+
+    console.log("Opciones aplicadas:", options);
     const result = processData(data, options);
     updateDisplay(result);
   }
@@ -93,24 +100,24 @@ export const home = () => {
     yearSort.value = "";
     applyFiltersAndSort();
   });
-  
-  clearButton.addEventListener('click', () => {
-    yearFilter.value = '';
-    locationFilter.value = '';
-    yearSort.value = '';
-    locationSort.value = '';
+
+  clearButton.addEventListener("click", () => {
+    yearFilter.value = "";
+    locationFilter.value = "";
+    yearSort.value = "";
+    locationSort.value = "";
     clearAllFilters();
     updateDisplay({ processedData: data, stats: {} });
   });
 
- // Reemplaza el event listener actual del statsButton con este:
-statsButton.addEventListener('click', () => {
+  // Reemplaza el event listener actual del statsButton con este:
+  statsButton.addEventListener("click", () => {
     // Limpiar el contenedor principal
     container.innerHTML = "";
-    
+
     // Calcular las estadísticas
     const stats = computeStats(data);
-    
+
     // Crear y mostrar el contenedor de estadísticas
     statsDisplay.innerHTML = `
       <div class="stats-container">
@@ -118,33 +125,38 @@ statsButton.addEventListener('click', () => {
         <ul class="stats-list">
           ${Object.entries(stats)
             .sort(([, a], [, b]) => b - a) // Ordenar por porcentaje de mayor a menor
-            .map(([country, percentage]) => `
+            .map(
+              ([country, percentage]) => `
               <li class="stats-item">
                 <span class="country">${country}</span>
                 <span class="percentage">${percentage}%</span>
               </li>
-            `).join('')}
+            `
+            )
+            .join("")}
         </ul>
       </div>
     `;
-});
- //Inicialización
+  });
+  //Inicialización
   updateDisplay({ processedData: data, stats: {} });
 
   return viewEl;
 };
 
 function createFilter(label, options) {
-  const select = document.createElement('select');
+  const select = document.createElement("select");
   select.innerHTML = `
     <option value="">${label}</option>
-    ${options.map(option => `<option value="${option}">${option}</option>`).join('')}
+    ${options
+      .map((option) => `<option value="${option}">${option}</option>`)
+      .join("")}
   `;
   return select;
 }
 
 function createSort(label) {
-  const select = document.createElement('select');
+  const select = document.createElement("select");
   select.innerHTML = `
     <option value="">${label}</option>
     <option value="asc">Ascendente</option>
@@ -154,9 +166,9 @@ function createSort(label) {
 }
 
 function getUniqueYears(data) {
-  return [...new Set(data.map(item => item.facts.yearOfEvent))].sort();
+  return [...new Set(data.map((item) => item.facts.yearOfEvent))].sort();
 }
 
 function getUniqueLocations(data) {
-  return [...new Set(data.map(item => item.facts.location))].sort();
+  return [...new Set(data.map((item) => item.facts.location))].sort();
 }

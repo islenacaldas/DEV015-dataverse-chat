@@ -2,7 +2,6 @@ import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
 import {} from "./views/chatGrupal.js";
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
 
