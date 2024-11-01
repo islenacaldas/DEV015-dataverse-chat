@@ -1,4 +1,5 @@
 import {header} from "./componentes/header.js";
+import { footer } from "./componentes/footer.js";
 let ROUTES = {};
 let rootEl;
 
@@ -37,6 +38,7 @@ function renderView(route, props) {
     rootEl.innerHTML = '';
     rootEl.appendChild(header())//esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
     rootEl.appendChild(viewElement);
+    rootEl.appendChild(footer())
   } else {
     if (ROUTES["/error"]) {
       renderView("/error", { errorMessage: "Route not found" });
