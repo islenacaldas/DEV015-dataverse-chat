@@ -1,38 +1,36 @@
-
 // Mantenemos tus funciones originales sin cambios
 export const filterDataByLocation = (data, value) => {
   // Si no hay valor de filtro, retornar todos los datos
   if (!value) return data;
-  
+
   // Hacer la comparación exacta
-  return data.filter(item => item.facts.location === value);
+  return data.filter((item) => item.facts.location === value);
 };
 
 export const filterByYear = (data, value) => {
   // Si no hay valor de filtro, retornar todos los datos
   if (!value) return data;
-  
+
   const yearNumber = parseInt(value, 10);
   // Hacer la comparación exacta con números
-  return data.filter(item => item.facts.yearOfEvent === yearNumber);
+  return data.filter((item) => item.facts.yearOfEvent === yearNumber);
 };
-
 
 export const sortData = (data, sortBy, sortOrder) => {
   return [...data].sort((a, b) => {
     let compareA, compareB;
 
     switch (sortBy) {
-    case 'year':
-      compareA = parseInt(a.facts.yearOfEvent, 10);
-      compareB = parseInt(b.facts.yearOfEvent, 10);
-      break;
-    case 'location':
-      compareA = a.facts.location.toLowerCase();
-      compareB = b.facts.location.toLowerCase();
-      break;
-    default:
-      return 0;
+      case "year":
+        compareA = parseInt(a.facts.yearOfEvent, 10);
+        compareB = parseInt(b.facts.yearOfEvent, 10);
+        break;
+      case "location":
+        compareA = a.facts.location.toLowerCase();
+        compareB = b.facts.location.toLowerCase();
+        break;
+      default:
+        return 0;
     }
 
     let compare = 0;
@@ -42,7 +40,7 @@ export const sortData = (data, sortBy, sortOrder) => {
       compare = -1;
     }
 
-    return sortOrder === 'desc' ? compare * -1 : compare;
+    return sortOrder === "desc" ? compare * -1 : compare;
   });
 };
 
@@ -50,13 +48,13 @@ export function computeStats(data) {
   const countryCount = {};
   const totalInventions = data.length;
 
-  data.forEach(item => {
+  data.forEach((item) => {
     const country = item.facts.location;
     countryCount[country] = (countryCount[country] || 0) + 1;
   });
 
   const stats = {};
-  for (const [country, count] of Object.entries(countryCount)){
+  for (const [country, count] of Object.entries(countryCount)) {
     stats[country] = Math.round((count / totalInventions) * 100);
   }
 
@@ -65,10 +63,10 @@ export function computeStats(data) {
 
 // Objeto para mantener el estado de los filtros y ordenamiento
 const state = {
-  location: '',
-  year: '',
-  sortBy: '',
-  sortOrder: ''
+  location: "",
+  year: "",
+  sortBy: "",
+  sortOrder: "",
 };
 
 // Función combinada actualizada
@@ -100,8 +98,12 @@ export function processData(data, options = {}) {
 
 // Función para limpiar todos los filtros
 export function clearAllFilters() {
-  state.location = '';
-  state.year = '';
-  state.sortBy = '';
-  state.sortOrder = '';
+  state.location = "";
+  state.year = "";
+  state.sortBy = "";
+  state.sortOrder = "";
+}
+
+export function getElementDataById(data, id) {
+  return data.find((item) => item.id === id);
 }

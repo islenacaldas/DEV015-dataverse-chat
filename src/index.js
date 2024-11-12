@@ -1,6 +1,10 @@
 import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
-import {} from "./views/chatGrupal.js";
+import { chatIndividual } from "./componentes/chatIndividual.js";
+/*import {chatGrupal} from "./views/chatGrupal.js";*/
+/*import {openAi} from "./lib/apiOpenAi.js"*/
+import { apiKey } from "./views/ApiKey.js";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
@@ -17,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setRoutes({
     "/": home,
+    "/api": apiKey,
+    "/chatIndividual": chatIndividual,
     //"/chat-grupal": chatGrupal,
     "/error": (props) => {
       const el = document.createElement("div");
@@ -38,3 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Renderiza la vista inicial
   onURLChange();
 });
+/*openAi("Hola, ¿cómo estás?").then(response => {
+  console.log(response);
+}).catch(error => {
+  console.error("Error al llamar a OpenAI:", error);
+});*/

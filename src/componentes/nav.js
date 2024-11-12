@@ -1,3 +1,4 @@
+import { navigationTo } from "../router.js";
 export const nav = () => {
   //creacion del evento nav
   const navContainer = document.createElement("div");
@@ -17,15 +18,15 @@ export const nav = () => {
 `;
   //agrega los eventos a los botones
   navContainer.querySelector(".nav_logo").addEventListener("click", () => {
-    navigateTo("/");
+    navigationTo("/");
   });
 
   navContainer.querySelector(".nav_chat_btn").addEventListener("click", () => {
-    navigateTo("/chat-grupal");
+    navigationTo("/chat-grupal");
   });
 
-  navContainer.querySelector(".nav_chat_btn").addEventListener("click", () => {
-    navigateTo("/api");
+  navContainer.querySelector(".nav_api_btn").addEventListener("click", () => {
+    navigationTo("/api");
   });
 
   return navContainer;
