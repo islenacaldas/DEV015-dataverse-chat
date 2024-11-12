@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "/": home,
     "/api": apiKey,
     "/chatIndividual": chatIndividual,
-    //"/chat-grupal": chatGrupal,
+    //"/chatGrupal": chatGrupal,
     "/error": (props) => {
       const el = document.createElement("div");
       el.textContent = props.errorMessage || "An error occurred";

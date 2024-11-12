@@ -14,7 +14,6 @@ export function chatIndividual(props) {
 
   //obtener los datos del elemento
   const elementData = getElementDataById(data, id);
-  console.log(elementData);
   chatView.innerHTML = `
     <h1>Chat con ${elementData.name}</h1>
     <div class="chat-window">

@@ -7,12 +7,14 @@ export const nav = () => {
   //muestra en el html el nav
   navContainer.innerHTML = `
 <div class="nav_logo">
-<img class="nav_logo_img" src="./logos/logo.svg" alt="dataverse"/>
+<!--<img class="nav_logo_img" src="./logos/logo.svg" alt="dataverse"/>-->
+<span class="nav_logo_emoji"> 🚀</span>
 <h2>Inventos Revolucionarios</h2>
 </div>
 
 <div class="nav_chat">
 <button class="nav_chat_btn">Chat grupal</button>
+<button class="nav_chatIn_btn">Chat individual</button>
 <button class="nav_api_btn">API</button>
 </div>
 `;
@@ -22,7 +24,10 @@ export const nav = () => {
   });
 
   navContainer.querySelector(".nav_chat_btn").addEventListener("click", () => {
-    navigationTo("/chat-grupal");
+    navigationTo("/chatGrupal");
+  });
+  navContainer.querySelector(".nav_chatIn_btn").addEventListener("click", () => {
+    navigationTo("/chatIndividual");
   });
 
   navContainer.querySelector(".nav_api_btn").addEventListener("click", () => {
