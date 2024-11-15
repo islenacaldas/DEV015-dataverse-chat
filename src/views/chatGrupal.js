@@ -1,3 +1,4 @@
+import { navigationTo } from "../router.js";
 import { nav } from "../componentes/nav.js";
 import { sendMessage } from "../lib/apiOpenAi.js";
 import data from "../data/dataset.js";
@@ -18,6 +19,7 @@ export const chatGrupal = () => {
   const chatWindow = chatGroupContainer.querySelector("#chat-window");
   const chatForm = chatGroupContainer.querySelector("#chat-form");
   const userInput = chatGroupContainer.querySelector("#user-input");
+  const backButton = chatGroupContainer.querySelector("#back-button");
 
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
