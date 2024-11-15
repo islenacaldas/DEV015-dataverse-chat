@@ -2,9 +2,35 @@ import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
 import { chatIndividual } from "./componentes/chatIndividual.js";
 import {chatGrupal} from "./views/chatGrupal.js";
-/*import {openAi} from "./lib/apiOpenAi.js"*/
+import {sendMessage} from "./lib/apiOpenAi.js"
 import { apiKey } from "./views/ApiKey.js";
+import data from "./data/dataset.js"
 
+async function sendMessages() {
+  const responses = await Promise.all(data.map(async (item) => {
+    try {
+      const response = await sendMessage(item.description);
+      return { name: item.name, response };
+    } catch (error) {
+      console.error("Error al comunicar con OpenAI:", error);
+      return { name: item.name, response: "Error en la respuesta" };
+    }
+  }));
+
+  // Mostrar las respuestas en la UI
+  displayResponses(responses);
+}
+
+function displayResponses(responses) {
+  const responseContainer = document.getElementById("response-container");
+  if (!responseContainer) return;
+
+  responses.forEach(({ name, response }) => {
+    const responseEl = document.createElement("div");
+    responseEl.textContent = `${name}: ${response}`;
+    responseContainer.appendChild(responseEl);
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
@@ -41,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Renderiza la vista inicial
+  sendMessages()// Renderiza la vista inicial
   onURLChange();
 });
 /*openAi("Hola, ¿cómo estás?").then(response => {
