@@ -1,7 +1,7 @@
 import { setRootEl, setRoutes, onURLChange, navigationTo } from "./router.js";
 import { home } from "./views/home.js";
 import { chatIndividual } from "./componentes/chatIndividual.js";
-/*import {chatGrupal} from "./views/chatGrupal.js";*/
+import {chatGrupal} from "./views/chatGrupal.js";
 /*import {openAi} from "./lib/apiOpenAi.js"*/
 import { apiKey } from "./views/ApiKey.js";
 
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "/": home,
     "/api": apiKey,
     "/chatIndividual": chatIndividual,
-    //"/chatGrupal": chatGrupal,
+    "/chatGrupal": chatGrupal,
     "/error": (props) => {
       const el = document.createElement("div");
       el.textContent = props.errorMessage || "An error occurred";
