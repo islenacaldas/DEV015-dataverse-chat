@@ -1,4 +1,3 @@
-import { navigationTo } from "../router.js";
 import { sendMessage } from "../lib/apiOpenAi.js";
 import data from "../data/dataset.js";
 import { getElementDataById } from "../lib/dataFunction.js";
