@@ -1,49 +1,94 @@
 import { navigationTo } from "../router.js";
-import { nav } from "../componentes/nav.js";
 import { sendMessage } from "../lib/apiOpenAi.js";
 import data from "../data/dataset.js";
+import { getElementDataById } from "../lib/dataFunction.js";
 
 export const chatGrupal = () => {
   const chatGroupContainer = document.createElement("div");
   chatGroupContainer.classList.add("chat-group");
 
-  chatGroupContainer.innerHTML = `
-    <h1>Chat Grupal</h1>
-    <div id="chat-window" class="chat-window"></div>
-    <form id="chat-form" class="chat-form">
-      <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." required />
-      <button type="submit">Enviar</button>
-    </form>
-  `;
+  const title = document.createElement("h1");
+  title.textContent = "Chat Grupal con Inventores";
+  chatGroupContainer.appendChild(title);
 
-  const chatWindow = chatGroupContainer.querySelector("#chat-window");
-  const chatForm = chatGroupContainer.querySelector("#chat-form");
-  const userInput = chatGroupContainer.querySelector("#user-input");
-  const backButton = chatGroupContainer.querySelector("#back-button");
+  const listTitle = document.createElement("h2");
+  listTitle.textContent = "Selecciona un inventor para chatear:";
+  chatGroupContainer.appendChild(listTitle);
+
+  const list = document.createElement("ul");
+
+  data.forEach(item => {
+    const listItem = document.createElement("li");
+    listItem.textContent = item.name;
+    listItem.addEventListener("click", () => {
+      startChat(item.id);
+    });
+    list.appendChild(listItem);
+  });
+
+  chatGroupContainer.appendChild(list);
+
+  const chatWindow = document.createElement("div");
+  chatWindow.classList.add("chat-window");
+  chatGroupContainer.appendChild(chatWindow);
+
+  const chatForm = document.createElement("form");
+  chatForm.classList.add("chat-form");
+
+  const userInput = document.createElement("input");
+  userInput.type = "text";
+  userInput.placeholder = "Escribe tu mensaje aquí...";
+  userInput.required = true;
+  chatForm.appendChild(userInput);
+
+  const sendButton = document.createElement("button");
+  sendButton.type = "submit";
+  sendButton.textContent = "Enviar";
+  chatForm.appendChild(sendButton);
+
+  chatGroupContainer.appendChild(chatForm);
 
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const message = userInput.value;
-    userInput.value = ""; // Corrige el typo aquí
+    userInput.value = "";
 
-    // Agregar el mensaje del usuario a la ventana del chat
     const userMessageDiv = document.createElement("div");
     userMessageDiv.classList.add("user-message");
-    userMessageDiv.textContent = message; // Corrige el typo aquí
+    userMessageDiv.textContent = message;
     chatWindow.appendChild(userMessageDiv);
 
-    // Enviar el mensaje a la API y obtener la respuesta
-    const response = await sendMessage(message); // Asegúrate de que sendMessage devuelve una promesa que resuelve a un string o array de strings
+    const response = await sendMessage(message);
 
-    // Agregar la respuesta de la API a la ventana del chat
     const responseDiv = document.createElement("div");
     responseDiv.classList.add("response-message");
-    responseDiv.textContent = response; // Asume que response es un string
+    responseDiv.textContent = response;
     chatWindow.appendChild(responseDiv);
 
-    // Desplazar la ventana del chat hacia abajo
     chatWindow.scrollTop = chatWindow.scrollHeight;
   });
+
+  async function startChat(inventorId) {
+    const inventor = getElementDataById(data, inventorId);
+    if (!inventor) {
+      console.error("Inventor no encontrado");
+      return;
+    }
+
+    const introMessage = `Hola ${inventor.name}, ¿puedes contarme más sobre tu invento?`;
+    const introMessageDiv = document.createElement("div");
+    introMessageDiv.classList.add("user-message");
+    introMessageDiv.textContent = introMessage;
+    chatWindow.appendChild(introMessageDiv);
+
+    const response = await sendMessage(introMessage);
+    const responseDiv = document.createElement("div");
+    responseDiv.classList.add("response-message");
+    responseDiv.textContent = response;
+    chatWindow.appendChild(responseDiv);
+
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
 
   return chatGroupContainer;
 };
