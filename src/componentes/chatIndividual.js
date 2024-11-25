@@ -30,24 +30,29 @@ export function chatIndividual() {
   const chatInput = chatView.querySelector("#chat-input");
   const chatWindow = chatView.querySelector(".chat-window");
   const backButton = chatView.querySelector("#back-button");
+  const conversation = [];
 
   chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const message = chatInput.value;
     if (message) {
-      const response = await sendMessage(message);
+      conversation.push({ role: "user", content: message });
+      const response = await sendMessage(conversation);
       chatInput.value = "";
+      chatWindow.innerHTML = "";
 
-      const userMessageDiv = document.createElement("div");
-      userMessageDiv.classList.add("user-message");
-      userMessageDiv.textContent = `Tú: ${message}`;
-      chatWindow.appendChild(userMessageDiv);
+      for ( let item of response) {
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("user-message");
+        userMessageDiv.textContent = `${item.role}: ${item.content}`;
+        chatWindow.appendChild(userMessageDiv);
+      }
 
-      const responseDiv = document.createElement("div");
+      /*const responseDiv = document.createElement("div");
       responseDiv.classList.add("response-message");
       responseDiv.textContent = `Respuesta: ${response}`;
       chatWindow.appendChild(responseDiv);
-
+*/
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
   });
