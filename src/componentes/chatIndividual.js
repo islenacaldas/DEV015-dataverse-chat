@@ -1,15 +1,18 @@
 import { navigationTo } from "../router.js";
 import data from "../data/dataset.js";
 import { getElementDataById } from "../lib/dataFunction.js";
-import { sendMessage } from "../lib/apiOpenAi.js";
+import { sendMessage } from "../lib/apiOpenAi.js"; // Asegúrate de usar la función para interactuar con Groq
 
-export function chatIndividual() {
+export function chatIndividual(props) {
   const chatView = document.createElement("div");
   chatView.classList.add("chat-individual");
 
   const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("id");
-
+  let id = urlParams.get("id");
+  if (id === null) {
+    id = props.id;
+  }
+ 
   const elementData = getElementDataById(data, id);
   if (!elementData) {
     chatView.innerHTML = "<p>Inventor no encontrado</p>";
@@ -35,25 +38,47 @@ export function chatIndividual() {
   chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const message = chatInput.value;
-    if (message) {
-      conversation.push({ role: "user", content: message });
-      const response = await sendMessage(conversation);
-      chatInput.value = "";
-      chatWindow.innerHTML = "";
 
-      for ( let item of response) {
-        const userMessageDiv = document.createElement("div");
-        userMessageDiv.classList.add("user-message");
-        userMessageDiv.textContent = `${item.role}: ${item.content}`;
-        chatWindow.appendChild(userMessageDiv);
+    if (message) {
+      // Generar el prompt inicial basado en el personaje
+      const personaPrompt =
+        elementData.personaPrompt ||
+        `Actúa como el inventor de ${elementData.name}, y recuerda que ${elementData.context}.`;
+
+      console.log(personaPrompt);
+
+      // Agregar el prompt del sistema si es el inicio de la conversación
+      if (conversation.length === 0) {
+        conversation.push({ role: "system", content: personaPrompt });
       }
 
-      /*const responseDiv = document.createElement("div");
-      responseDiv.classList.add("response-message");
-      responseDiv.textContent = `Respuesta: ${response}`;
-      chatWindow.appendChild(responseDiv);
-*/
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      // Agregar el mensaje del usuario al historial
+      conversation.push({ role: "user", content: message });
+
+      try {
+        // Enviar la conversación al servicio Groq
+        const response = await sendMessage(conversation);
+
+        // Limpiar la entrada y actualizar el chat
+        chatInput.value = "";
+        chatWindow.innerHTML = "";
+
+        response.forEach((item) => {
+          if (item.role !== "system") {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add(`${item.role}-message`);
+            messageDiv.textContent = `${item.role}: ${item.content}`;
+            chatWindow.appendChild(messageDiv);
+          }
+        });
+
+        // Mantén el scroll en la parte inferior
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      } catch (error) {
+        console.error("Error al enviar el mensaje:", error);
+        chatWindow.innerHTML +=
+          "<p class='error-message'>Error al procesar la solicitud.</p>";
+      }
     }
   });
 

@@ -1,4 +1,4 @@
-import {header} from "./componentes/header.js";
+import { header } from "./componentes/header.js";
 import { footer } from "./componentes/footer.js";
 let ROUTES = {};
 let rootEl;
@@ -35,10 +35,10 @@ function renderView(route, props) {
       console.error("Root element not set. Call setRootEl first.");
       return;
     }
-    rootEl.innerHTML = '';
-    rootEl.appendChild(header())//esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
+    rootEl.innerHTML = "";
+    rootEl.appendChild(header()); //esto me deja ver mi menu de navegacion en todas y cada una de las paginas.
     rootEl.appendChild(viewElement);
-    rootEl.appendChild(footer())
+    rootEl.appendChild(footer());
   } else {
     if (ROUTES["/error"]) {
       renderView("/error", { errorMessage: "Route not found" });
@@ -47,7 +47,12 @@ function renderView(route, props) {
 }
 
 export const navigationTo = (pathname, props = {}) => {
-  window.history.pushState({}, null, pathname);
+  if (props.id && pathname === "/chatIndividual") {
+    window.history.pushState({}, null, pathname + "?id=" + props.id);
+  } else {
+    window.history.pushState({}, null, pathname);
+  }
+
   renderView(pathname, props);
 };
 

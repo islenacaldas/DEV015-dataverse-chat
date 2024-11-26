@@ -1,9 +1,7 @@
-import { sendMessage } from "../lib/apiOpenAi.js";
+import { sendMessage } from "../lib/apiOpenAi.js"; // Usar la función para interactuar con Groq
 import data from "../data/dataset.js";
 
-
 export const chatGrupal = () => {
-
   const chatGroupContainer = document.createElement("div");
   chatGroupContainer.classList.add("chat-group");
 
@@ -12,12 +10,12 @@ export const chatGrupal = () => {
   mainElement.classList.add("chat-group-main");
   chatGroupContainer.appendChild(mainElement);
 
-  // Establecemos la estructura del main element
+  // Estructura principal
   const chatGroup = document.createElement("div");
   chatGroup.classList.add("group-container");
   mainElement.appendChild(chatGroup);
 
-  // Cambiamos el título y el favicon 
+  // Cambiar título y favicon
   document.title = "Chat Grupal";
 
   // Contenedor de logos tecnológicos
@@ -28,9 +26,8 @@ export const chatGrupal = () => {
   imageLogo.classList.add("image-logo");
   logoTecnological.appendChild(imageLogo);
 
-  // Selecciona solo los primeros 10 elementos del array
+  // Selección de logos
   const dataLimitada = data.slice(0, 10);
-
   dataLimitada.forEach((objeto) => {
     const logoTech = document.createElement("img");
     logoTech.classList.add("image-logo-tech");
@@ -39,21 +36,21 @@ export const chatGrupal = () => {
     imageLogo.appendChild(logoTech);
   });
 
-  // Crear un contenedor de detalles de logo
+  // Detalles del chat grupal
   const details = document.createElement("div");
   details.classList.add("details-logo");
   details.innerHTML = `
     <h2>Chat grupal de Inventos</h2>
-    <p>¡Bienvenida al Chat Grupal de Inventos que cambiaron el mundo! 🚀 Conecta y aprende con 26 Inventosen tiempo real. 🌟</p>
+    <p>¡Bienvenida al Chat Grupal de Inventos que cambiaron el mundo! 🚀 Conecta y aprende con 26 inventores en tiempo real. 🌟</p>
   `;
   logoTecnological.appendChild(details);
 
-  // Contenedor de chat
+  // Contenedor de mensajes
   const chatWindow = document.createElement("div");
   chatWindow.classList.add("chat-tecnologic");
   chatGroup.appendChild(chatWindow);
 
-  // Formulario de chat
+  // Formulario para enviar mensajes
   const chatForm = document.createElement("form");
   chatForm.classList.add("chat-form");
 
@@ -68,34 +65,47 @@ export const chatGrupal = () => {
   sendButton.textContent = "Enviar";
   chatForm.appendChild(sendButton);
 
-  // Crear una función para enviar el mensaje a todos los inventores
+  // Función para manejar el envío del mensaje grupal
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const message = userInput.value;
     userInput.value = "";
-
+  
     // Mostrar mensaje del usuario
     const userMessageDiv = document.createElement("div");
     userMessageDiv.classList.add("user-message");
-    userMessageDiv.textContent = message;
+    userMessageDiv.textContent = `Tú: ${message}`;
     chatWindow.appendChild(userMessageDiv);
-
+  
     // Enviar el mensaje a todos los inventores
     for (const invento of data) {
-      const response = await sendMessage(`${invento.name}, ${message}`);
-      const responseDiv = document.createElement("div");
-      responseDiv.classList.add("response-message");
-      responseDiv.textContent = `${invento.name}: ${response}`;
-      chatWindow.appendChild(responseDiv);
+      try {
+        const response = await sendMessage(`${invento.name}, ${message}`);
+        
+        // Asegúrate de que `response.content` es la propiedad con el texto de la respuesta
+        const responseContent = response.content || "Respuesta no disponible";
+  
+        const responseDiv = document.createElement("div");
+        responseDiv.classList.add("response-message");
+        responseDiv.textContent = `${invento.name}: ${responseContent}`;
+        chatWindow.appendChild(responseDiv);
+      } catch (error) {
+        console.error(`Error al enviar mensaje a ${invento.name}:`, error);
+        const errorDiv = document.createElement("div");
+        errorDiv.classList.add("error-message");
+        errorDiv.textContent = `${invento.name}: No se pudo obtener respuesta.`;
+        chatWindow.appendChild(errorDiv);
+      }
     }
-
+  
     // Mantener el scroll al final
     chatWindow.scrollTop = chatWindow.scrollHeight;
   });
+  
 
   chatGroup.appendChild(chatForm);
 
-  // Vista lateral con usuarios
+  // Vista lateral con los inventores
   const ulInventors = document.createElement("ul");
   ulInventors.classList.add("technologies");
   mainElement.appendChild(ulInventors);

@@ -4,6 +4,7 @@ import {
   clearAllFilters,
   computeStats,
 } from "../lib/dataFunction.js";
+import { navigationTo } from "../router.js";
 
 export const home = () => {
   const viewEl = document.createElement("div");
@@ -24,6 +25,12 @@ export const home = () => {
       <p>${item.facts.impact}</p>
       </div>
       `;
+      const button = document.createElement("button");
+      button.textContent = "chatear";
+      button.addEventListener("click", () => {
+        navigationTo("/chatIndividual", { id: item.id });
+      });
+      li.appendChild(button);
       ul.appendChild(li);
     });
     return ul;
