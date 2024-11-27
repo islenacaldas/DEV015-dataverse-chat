@@ -65,44 +65,6 @@ export const chatGrupal = () => {
   sendButton.textContent = "Enviar";
   chatForm.appendChild(sendButton);
 
-  // Función para manejar el envío del mensaje grupal
-  chatForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const message = userInput.value;
-    userInput.value = "";
-  
-    // Mostrar mensaje del usuario
-    const userMessageDiv = document.createElement("div");
-    userMessageDiv.classList.add("user-message");
-    userMessageDiv.textContent = `Tú: ${message}`;
-    chatWindow.appendChild(userMessageDiv);
-  
-    // Enviar el mensaje a todos los inventores
-    for (const invento of data) {
-      try {
-        const response = await sendMessage(`${invento.name}, ${message}`);
-        
-        // Asegúrate de que `response.content` es la propiedad con el texto de la respuesta
-        const responseContent = response.content || "Respuesta no disponible";
-  
-        const responseDiv = document.createElement("div");
-        responseDiv.classList.add("response-message");
-        responseDiv.textContent = `${invento.name}: ${responseContent}`;
-        chatWindow.appendChild(responseDiv);
-      } catch (error) {
-        console.error(`Error al enviar mensaje a ${invento.name}:`, error);
-        const errorDiv = document.createElement("div");
-        errorDiv.classList.add("error-message");
-        errorDiv.textContent = `${invento.name}: No se pudo obtener respuesta.`;
-        chatWindow.appendChild(errorDiv);
-      }
-    }
-  
-    // Mantener el scroll al final
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  });
-  
-
   chatGroup.appendChild(chatForm);
 
   // Vista lateral con los inventores
@@ -119,6 +81,71 @@ export const chatGrupal = () => {
       <p>${objeto.shortDescription}</p>
     `;
     ulInventors.appendChild(liInventors);
+  });
+
+  // Manejo de las conversaciones grupales
+  const conversations = {};
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const message = userInput.value;
+    userInput.value = "";
+
+    // Mostrar mensaje del usuario
+    const userMessageDiv = document.createElement("div");
+    userMessageDiv.classList.add("user-message");
+    userMessageDiv.textContent = `Tú: ${message}`;
+    chatWindow.appendChild(userMessageDiv);
+
+    // Inicializar conversaciones si no están creadas
+    data.forEach((invento) => {
+      if (!conversations[invento.name]) {
+        const personaPrompt = `Actúa como el inventor de ${invento.name}. Siempre responde basado en este contexto: "${invento.context}".`;
+        conversations[invento.name] = [
+          { role: "system", content: personaPrompt },
+        ];
+      }
+
+      // Agregar el mensaje del usuario al historial del inventor
+      conversations[invento.name].push({ role: "user", content: message });
+    });
+
+    // Enviar mensajes a cada inventor
+    for (const invento of data) {
+      try {
+        const response = await sendMessage(conversations[invento.name]);
+
+        if (response && response.length > 0) {
+          // Filtrar para no mostrar mensajes de tipo "system"
+          response.forEach((item) => {
+            if (item.role !== "system") {
+              // Agregar la respuesta al historial del inventor
+              conversations[invento.name].push({
+                role: item.role,
+                content: item.content,
+              });
+
+              // Mostrar la respuesta en el chat
+              const responseDiv = document.createElement("div");
+              responseDiv.classList.add(`${item.role}-message`);
+              responseDiv.textContent = `${invento.name}: ${item.content}`;
+              chatWindow.appendChild(responseDiv);
+            }
+          });
+        }
+      } catch (error) {
+        console.error(`Error al enviar mensaje a ${invento.name}:`, error);
+
+        // Mostrar un mensaje de error
+        const errorDiv = document.createElement("div");
+        errorDiv.classList.add("error-message");
+        errorDiv.textContent = `${invento.name}: No se pudo obtener respuesta.`;
+        chatWindow.appendChild(errorDiv);
+      }
+    }
+
+    // Mantener el scroll al final
+    chatWindow.scrollTop = chatWindow.scrollHeight;
   });
 
   return chatGroupContainer;
