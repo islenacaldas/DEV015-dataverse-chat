@@ -29,7 +29,6 @@ const queryStringToObject = (queryString) => {
 function renderView(route, props) {
   const view = ROUTES[route];
   if (view) {
-    console.log("Rendering view:", view);
     const viewElement = view(props);
     if (!rootEl) {
       console.error("Root element not set. Call setRootEl first.");

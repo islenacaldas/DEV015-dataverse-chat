@@ -14,7 +14,6 @@ export const nav = () => {
 
 <div class="nav_chat">
 <button class="nav_chat_btn">Chat grupal</button>
-<button class="nav_chatIn_btn">Chat individual</button>
 <button class="nav_api_btn">API</button>
 </div>
 `;
@@ -26,9 +25,7 @@ export const nav = () => {
   navContainer.querySelector(".nav_chat_btn").addEventListener("click", () => {
     navigationTo("/chatGrupal");
   });
-  navContainer.querySelector(".nav_chatIn_btn").addEventListener("click", () => {
-    navigationTo("/chatIndividual");
-  });
+
 
   navContainer.querySelector(".nav_api_btn").addEventListener("click", () => {
     navigationTo("/api");
